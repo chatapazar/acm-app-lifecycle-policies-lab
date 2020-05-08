@@ -1,8 +1,9 @@
 apiVersion: apps.open-cluster-management.io/v1
 kind: Channel
 metadata:
-  name: mvazquez-gitops-github
+  name: acm-gitops-github
   namespace: gitops-apps
 spec:
   type: GitHub
-  pathname: https://github.com/mvazquezc/acm-testing.git
+  pathname: https://github.com/RHsyseng/acm-app-lifecycle-policies-lab.git
+
