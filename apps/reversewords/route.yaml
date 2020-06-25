@@ -1,0 +1,13 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app: reverse-words
+  name: reverse-words
+spec:
+  port:
+    targetPort: 8080
+  to:
+    kind: Service
+    name: reverse-words
+    weight: 100
