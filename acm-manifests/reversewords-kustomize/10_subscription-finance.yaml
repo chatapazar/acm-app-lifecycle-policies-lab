@@ -23,8 +23,8 @@ metadata:
   labels:
     app: reversewords-finance-app
   annotations:
-    apps.open-cluster-management.io/github-path: apps/reversewords/
-    apps.open-cluster-management.io/github-branch: stage
+    apps.open-cluster-management.io/git-path: apps/reversewords/
+    apps.open-cluster-management.io/git-branch: stage
 spec:
   channel: gitops-apps/acm-gitops-github
   placement:

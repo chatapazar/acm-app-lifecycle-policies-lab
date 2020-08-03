@@ -1,34 +1,42 @@
-apiVersion: policy.mcm.ibm.com/v1alpha1
+apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
   name: policy-pod-enforce
   namespace: policies
   annotations:
-    policy.mcm.ibm.com/standards: 
-    policy.mcm.ibm.com/categories: 
-    policy.mcm.ibm.com/controls: 
+    policy.open-cluster-management.io/standards: 
+    policy.open-cluster-management.io/categories: 
+    policy.open-cluster-management.io/controls: 
 spec:
-  complianceType: musthave
   remediationAction: enforce
   disabled: false
-  namespaces:
-    exclude: ["kube-*"]
-    include: ["default"]
-  object-templates:
-    - complianceType: musthave
-      objectDefinition:
-        apiVersion: v1
-        kind: Pod 
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
         metadata:
-          name: nginx-pod
+          name: policy-pod-enforce-sample-nginx-pod
         spec:
-          containers:
-          - image: nginx:1.7.9
-            name: nginx
-            ports:
-            - containerPort: 80
+          remediationAction: inform
+          severity: low
+          namespaceSelector:
+            exclude: ["kube-*"]
+            include: ["default"]
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Pod
+                metadata:
+                  name: sample-nginx-pod
+                spec:
+                  containers:
+                  - image: nginx:1.7.9
+                    name: nginx
+                    ports:
+                    - containerPort: 80
 ---
-apiVersion: mcm.ibm.com/v1alpha1
+apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
   name: binding-policy-pod-enforce
@@ -40,7 +48,7 @@ placementRef:
 subjects:
 - name: policy-pod-enforce
   kind: Policy
-  apiGroup: policy.mcm.ibm.com
+  apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
@@ -49,7 +57,8 @@ metadata:
   namespace: policies
 spec:
   clusterConditions:
-  - type: OK
+  - status: "True"
+    type: ManagedClusterConditionAvailable
   clusterSelector:
     matchExpressions:
-      - {key: env, operator: In, values: ["dev"]}
+      - {key: environment, operator: In, values: ["dev"]}

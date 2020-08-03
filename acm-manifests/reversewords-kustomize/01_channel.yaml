@@ -4,6 +4,6 @@ metadata:
   name: acm-gitops-github
   namespace: gitops-apps
 spec:
-  type: GitHub
+  type: Git
   pathname: https://github.com/RHsyseng/acm-app-lifecycle-policies-lab.git
 
