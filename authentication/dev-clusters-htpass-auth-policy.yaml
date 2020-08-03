@@ -1,0 +1,89 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: policy-oauth-dev-clusters
+  namespace: day2ops-policies
+  annotations:
+    policy.open-cluster-management.io/standards: 
+    policy.open-cluster-management.io/categories: 
+    policy.open-cluster-management.io/controls: 
+spec:
+  remediationAction: enforce
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: policy-oauth-dev-clusters-oauth-secret
+        spec:
+          remediationAction: enforce
+          severity: high
+          namespaceSelector:
+            exclude: ["kube-*"]
+            include: ["openshift-config"]
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: htpass-credentials
+                  namespace: openshift-config
+                data:
+                  htpasswd: YWRtaW46JDJ5JDA1JEt1eDdQNnQwWnRObzkyb0pYSUprTmVHVFZXQUlmYXM2ZThnN3oxWXNSb2s5NHk0VEV2S0JxCg==
+                type: Opaque
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: policy-oauth-dev-clusters-oauth-config
+        spec:
+          remediationAction: enforce
+          severity: high
+          namespaceSelector:
+            exclude: ["kube-*"]
+            include: ["openshift-config"]
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: config.openshift.io/v1
+                kind: OAuth
+                metadata:
+                  name: cluster
+                spec:
+                  identityProviders:
+                  - name: HTPasswd
+                    mappingMethod: claim
+                    type: HTPasswd
+                    htpasswd:
+                      fileData:
+                        name: htpass-credentials
+                
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: binding-policy-oauth-dev-clusters
+  namespace: day2ops-policies
+placementRef:
+  name: placement-policy-oauth-dev-clusters
+  kind: PlacementRule
+  apiGroup: apps.open-cluster-management.io
+subjects:
+- name: policy-oauth-dev-clusters
+  kind: Policy
+  apiGroup: policy.open-cluster-management.io
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  name: placement-policy-oauth-dev-clusters
+  namespace: day2ops-policies
+spec:
+  clusterConditions:
+  - status: "True"
+    type: ManagedClusterConditionAvailable
+  clusterSelector:
+    matchExpressions:
+      - {key: environment, operator: In, values: ["dev"]}
