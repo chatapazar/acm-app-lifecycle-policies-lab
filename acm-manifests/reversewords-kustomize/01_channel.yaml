@@ -5,5 +5,5 @@ metadata:
   namespace: gitops-apps
 spec:
   type: Git
-  pathname: https://github.com/RHsyseng/acm-app-lifecycle-policies-lab.git
+  pathname: https://github.com/chatapazar/acm-app-lifecycle-policies-lab.git
 
