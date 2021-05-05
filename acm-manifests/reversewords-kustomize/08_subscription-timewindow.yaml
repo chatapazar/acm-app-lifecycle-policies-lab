@@ -33,8 +33,8 @@ spec:
       name: production-clusters
   timewindow:
     windowtype: "active"
-    location: "Europe/Madrid"
-    daysofweek: [ "Friday", "Saturday", "Sunday" ]
+    location: "Asia/Bangkok"
+    daysofweek: [ "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ]
     hours:
-      - start: "05:00PM"
+      - start: "01:00PM"
         end: "10:00PM"
