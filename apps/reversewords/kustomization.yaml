@@ -2,7 +2,7 @@ namespace: reverse-words-production
 commonLabels:
   app: reversewords-pro-app
 bases:
-- github.com/RHsyseng/acm-app-lifecycle-policies-lab/apps/reversewords?ref=config
+- github.com/chatapazar/acm-app-lifecycle-policies-lab/apps/reversewords?ref=config
 resources:
 - base/namespace.yaml
 patchesStrategicMerge:
