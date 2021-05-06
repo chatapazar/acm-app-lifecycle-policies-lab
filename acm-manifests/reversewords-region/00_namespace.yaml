@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: reverse-words-region
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Channel
+metadata:
+  name: acm-app-lifecycle-blog
+  namespace: reverse-words-region
+spec:
+  type: Git
+  pathname: https://github.com/chatapazar/acm-app-lifecycle-policies-lab.git
